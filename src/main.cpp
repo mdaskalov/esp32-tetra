@@ -15,27 +15,36 @@ Button2 btn2(BUTTON_2);
 Tetra tetra(tft,TFT_WIDTH,TFT_HEIGHT);
 int color = TFT_GREEN;
 
+#include "screenServer.h"
+
+bool upload = false;
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(921600);
   Serial.println("Tetra Start");
   randomSeed(analogRead(SEED_PIN));
   tft.init();
   btn1.setTapHandler([](Button2 & b) {
     Serial.println("Random Color (btn1)...");
     color = default_4bit_palette[random(15)+1];
+    //upload = true;
   });
   btn2.setTapHandler([](Button2 & b) {
     Serial.println("Random Tetra (btn2)...");
     tetra.randomize();
   });
-  animationTicker.attach_ms(60,[] {
-    tetra.animate(color);
-  });
+  // animationTicker.attach_ms(60,[] {
+  //   tetra.animate(color);
+  // });
 }
 
 void loop()
 {
   btn1.loop();
   btn2.loop();
+  tetra.animate(color);
+  if (upload) {
+    screenServer();
+    upload = false;
+  }
 }
