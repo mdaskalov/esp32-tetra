@@ -98,7 +98,7 @@ class Tetra {
     }
     void animate(uint32_t color) {
       img.pushSprite(0, 0);
-      img.fillSprite(TFT_BLACK);
+      img.fillSprite(TFT_NAVY);
       move();
       draw(color);
     }

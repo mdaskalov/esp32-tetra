@@ -13,7 +13,7 @@ Ticker animationTicker;
 Button2 btn1(BUTTON_1);
 Button2 btn2(BUTTON_2);
 Tetra tetra(tft,TFT_WIDTH,TFT_HEIGHT);
-int color = TFT_GREEN;
+int color = TFT_YELLOW;
 
 void setup()
 {
