@@ -29,7 +29,7 @@ void setup()
     Serial.println("Random Tetra (btn2)...");
     tetra.randomize();
   });
-  animationTicker.attach_ms(60,[] {
+  animationTicker.attach_ms(33,[] {
     tetra.animate(color);
   });
 }
