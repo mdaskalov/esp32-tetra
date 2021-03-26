@@ -3,15 +3,21 @@
 
 #define SEED_PIN 36 // analog read to initialize random generator
 
-Tetra tetra(TFT_HEIGHT,TFT_WIDTH);
+int background = TFT_NAVY;
 int color = TFT_YELLOW;
+
+TFT_eSprite sprite = TFT_eSprite(&M5.Lcd);
+
+Tetra tetra(TFT_HEIGHT,TFT_WIDTH);
 
 void setup()
 {
-  Serial.begin(115200);
+  M5.begin(true, false, true, false);
+
   Serial.println("Tetra Start");
-  M5.begin();
+
   randomSeed(analogRead(SEED_PIN));
+  sprite.createSprite(TFT_HEIGHT,TFT_WIDTH);
 }
 
 void loop()
@@ -25,5 +31,7 @@ void loop()
     Serial.println("Random Tetra (btn2)...");
     tetra.randomize();
   }
-  tetra.animate(color);
+  sprite.pushSprite(0, 0);
+  sprite.fillSprite(background);
+  tetra.animate(sprite,color);
 }
