@@ -1,5 +1,4 @@
 #pragma once
-
 #include <Arduino.h>
 
 class Axis {
@@ -82,30 +81,24 @@ class Tetra {
       c.move();
       d.move();
     }
-    void drawLine(TetraPoint &p1, TetraPoint &p2, uint32_t color) {
-      M5.lcd.drawLine(p1.xPos(),p1.yPos(),p2.xPos(),p2.yPos(),color);
+    void drawLine(TFT_eSprite &s, TetraPoint &p1, TetraPoint &p2, uint32_t color) {
+      s.drawLine(p1.xPos(),p1.yPos(),p2.xPos(),p2.yPos(),color);
     }
-    void drawTriangle(TetraPoint &a, TetraPoint &b, TetraPoint &c, uint32_t color)
+    void drawTriangle(TFT_eSprite &s, TetraPoint &a, TetraPoint &b, TetraPoint &c, uint32_t color)
     {
-      M5.lcd.drawTriangle(a.xPos(),a.yPos(),b.xPos(),b.yPos(),c.xPos(),c.yPos(),color);
+      s.drawTriangle(a.xPos(),a.yPos(),b.xPos(),b.yPos(),c.xPos(),c.yPos(),color);
     }
-    void draw(uint32_t color) {
-      drawTriangle(a,b,c,color);
-      drawLine(a,d,color);
-      drawLine(b,d,color);
-      drawLine(c,d,color);
+    void draw(TFT_eSprite &s, uint32_t color) {
+      drawTriangle(s,a,b,c,color);
+      drawLine(s,a,d,color);
+      drawLine(s,b,d,color);
+      drawLine(s,c,d,color);
     }
-    void animate(uint32_t color) {
-      //img.pushSprite(0, 0);
-      //img.fillSprite(TFT_NAVY);
-      M5.lcd.fillScreen(TFT_BLACK);
+    void animate(TFT_eSprite &s, uint32_t color) {
       move();
-      draw(color);
+      draw(s,color);
     }
 
     Tetra(int xMax, int yMax) : a(xMax,yMax),b(xMax,yMax),c(xMax,yMax),d(xMax,yMax) {
-
-
-      //img.createSprite(xMax, yMax);
     }
 };
