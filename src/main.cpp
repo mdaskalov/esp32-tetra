@@ -18,6 +18,7 @@ void setup()
 
   randomSeed(analogRead(SEED_PIN));
   sprite.createSprite(TFT_HEIGHT,TFT_WIDTH);
+  sprite.fillSprite(TFT_NAVY);
 }
 
 void loop()
@@ -31,7 +32,6 @@ void loop()
     Serial.println("Random Tetra (btn2)...");
     tetra.randomize();
   }
+  tetra.animate(sprite,color,background);
   sprite.pushSprite(0, 0);
-  sprite.fillSprite(background);
-  tetra.animate(sprite,color);
 }

@@ -94,7 +94,8 @@ class Tetra {
       drawLine(s,b,d,color);
       drawLine(s,c,d,color);
     }
-    void animate(TFT_eSprite &s, uint32_t color) {
+    void animate(TFT_eSprite &s, uint32_t color, uint32_t background) {
+      draw(s,background);
       move();
       draw(s,color);
     }
