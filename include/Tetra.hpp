@@ -1,8 +1,7 @@
 #pragma once
 #include <Arduino.h>
-#include <TFT_eSPI.h>
 
-class Axis {
+class TetraAxis {
   private:
     int maxPosition;
     int position;
@@ -10,16 +9,18 @@ class Axis {
     int velocity;
 
   public:
-    int pos() const { return position; }
-    void randomize() {
+    int  pos() const { return position; }
+    void randomize()
+    {
       randomPosition();
       randomDirection();
       randomVelocity();
     }
-    void randomPosition() { position = random(maxPosition+1); }
+    void randomPosition() { position = random(maxPosition + 1); }
     void randomDirection() { direction = random(2) ? -1 : 1; }
-    void randomVelocity() { velocity = random(3)+1;}
-    bool move() {
+    void randomVelocity() { velocity = random(3) + 1; }
+    bool move()
+    {
       position += direction * velocity;
       if (position < 0) {
         position = 0;
@@ -33,25 +34,27 @@ class Axis {
       }
       return false;
     }
-
-    Axis(int max) {
+    TetraAxis(int max)
+    {
       maxPosition = max;
       randomize();
     }
 };
 
-class Point {
+class TetraPoint {
   private:
-    Axis x,y;
+    TetraAxis x, y;
 
   public:
-    int xPos() const { return x.pos(); }
-    int yPos() const { return y.pos(); }
-    void randomize() {
+    int  xPos() const { return x.pos(); }
+    int  yPos() const { return y.pos(); }
+    void randomize()
+    {
       x.randomize();
       y.randomize();
     }
-    void move() {
+    void move()
+    {
       if (x.move()) {
         x.randomVelocity();
         y.randomVelocity();
@@ -61,49 +64,47 @@ class Point {
         y.randomVelocity();
       }
     }
-
-    Point(int xMax, int yMax): x(xMax), y(yMax) {}
+    TetraPoint(int xMax, int yMax) : x(xMax), y(yMax) {}
 };
 
-class Tetra {
+template <class Sprite> class Tetra {
   private:
-    TFT_eSprite img;
-    Point a,b,c,d;
+    Sprite    &s;
+    TetraPoint a, b, c, d;
 
   public:
-    void randomize() {
+    void randomize()
+    {
       a.randomize();
       b.randomize();
       c.randomize();
       d.randomize();
     }
-    void move() {
+    void move()
+    {
       a.move();
       b.move();
       c.move();
       d.move();
     }
-    void drawLine(Point &p1, Point &p2, uint32_t color) {
-      img.drawLine(p1.xPos(),p1.yPos(),p2.xPos(),p2.yPos(),color);
-    }
-    void drawTriangle(Point &a, Point &b, Point &c, uint32_t color)
+    void drawLine(TetraPoint &p1, TetraPoint &p2, uint32_t color) { s.drawLine(p1.xPos(), p1.yPos(), p2.xPos(), p2.yPos(), color); }
+    void drawTriangle(TetraPoint &a, TetraPoint &b, TetraPoint &c, uint32_t color)
     {
-      img.drawTriangle(a.xPos(),a.yPos(),b.xPos(),b.yPos(),c.xPos(),c.yPos(),color);
+      s.drawTriangle(a.xPos(), a.yPos(), b.xPos(), b.yPos(), c.xPos(), c.yPos(), color);
     }
-    void draw(uint32_t color) {
-      drawTriangle(a,b,c,color);
-      drawLine(a,d,color);
-      drawLine(b,d,color);
-      drawLine(c,d,color);
+    void draw(uint32_t color)
+    {
+      drawTriangle(a, b, c, color);
+      drawLine(a, d, color);
+      drawLine(b, d, color);
+      drawLine(c, d, color);
     }
-    void animate(uint32_t color) {
-      img.pushSprite(0, 0);
-      img.fillSprite(TFT_NAVY);
+    void animate(uint32_t color, uint32_t background)
+    {
+      s.pushSprite(0, 0);
+      s.fillSprite(background);
       move();
       draw(color);
     }
-
-    Tetra(TFT_eSPI &tft, int xMax, int yMax) : img(&tft),a(xMax,yMax),b(xMax,yMax),c(xMax,yMax),d(xMax,yMax) {
-      img.createSprite(xMax, yMax);
-    }
+    Tetra(Sprite &sprite, int xMax, int yMax) : s(sprite), a(xMax, yMax), b(xMax, yMax), c(xMax, yMax), d(xMax, yMax) { s.createSprite(xMax, yMax); }
 };
