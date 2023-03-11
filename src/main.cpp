@@ -3,8 +3,6 @@
 #ifdef CORE2
 #include <M5Core2.h>
 TFT_eSprite sprite = TFT_eSprite(&M5.Lcd);
-int         h = M5.Lcd.width();
-int         w = M5.Lcd.height();
 #else
 #include <Button2.h>
 #include <SPI.h>
